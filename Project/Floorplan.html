@@ -1,0 +1,1088 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX Architecture - Floor Plan</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 30px 15px;
+            background: #111827;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        #container {
+            width: 90%;
+            max-width: 950px;
+            margin: auto;
+        }
+
+        h1, h2 {
+            color: #60a5fa;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .panel {
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #374151;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        button, select, input {
+            padding: 11px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #4b5563;
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        input, select {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        input:disabled {
+            background: #9ca3af;
+        }
+
+        #floor {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: #0b1220;
+            border: 2px solid #374151;
+            border-radius: 6px;
+            touch-action: none;
+        }
+
+        .status {
+            color: #93c5fd;
+            min-height: 22px;
+        }
+
+        .calculationSection {
+            margin-top: 20px;
+            padding: 15px;
+            background: #111827;
+            border-radius: 8px;
+        }
+
+        .calculationSection input {
+            width: 180px;
+            max-width: 90%;
+        }
+
+        #structureResult {
+            display: none;
+            text-align: center;
+        }
+
+        #structureImage {
+            display: block;
+            max-width: 450px;
+            width: 90%;
+            max-height: 350px;
+            object-fit: contain;
+            margin: 20px auto;
+            border-radius: 8px;
+            background: white;
+        }
+
+        #completionMessage {
+            color: #fbbf24;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        #nextModuleButton {
+            margin-top: 20px;
+            padding: 15px 25px;
+            font-size: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="container">
+
+    <h1>APEX ARCHITECTURE GROUP</h1>
+    <h2>TRAINING MODULE 1: FLOOR PLAN</h2>
+
+    <div class="panel">
+
+        <h2>2D FLOOR PLAN DESIGN</h2>
+
+        <p>
+            Select a shape and create your building's base.
+            You can drag the shape around the grid.
+        </p>
+
+        <div class="controls">
+
+            <select id="shapeType">
+                <option value="rectangle">Rectangle</option>
+                <option value="circle">Circle</option>
+                <option value="triangle">Triangle</option>
+            </select>
+
+            <button id="generateShapeButton" onclick="generateShape()">
+                Generate Shape
+            </button>
+
+            <button onclick="clearFloor()">
+                Clear Floor
+            </button>
+
+        </div>
+
+        <canvas id="floor" width="900" height="600"></canvas>
+
+        <p class="status" id="shapeStatus"></p>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h2>BUILDING HEIGHT</h2>
+
+        <p>
+            Enter the height of your building and lock it.
+            You can do this before or after creating your shape.
+        </p>
+
+        <div class="controls">
+
+            <input
+                type="number"
+                id="heightInput"
+                min="0.01"
+                step="any"
+                placeholder="Enter height"
+            >
+
+            <button id="lockHeightButton" onclick="lockHeight()">
+                Lock Height
+            </button>
+
+        </div>
+
+        <p class="status" id="heightStatus"></p>
+
+        <button
+            id="generate3dButton"
+            onclick="generate3d()"
+            disabled
+        >
+            Generate 3D
+        </button>
+
+        <p class="status" id="generateStatus">
+            Create a shape and lock your height to continue.
+        </p>
+
+    </div>
+
+
+    <div class="panel" id="calculationArea" style="display: none;">
+
+        <h2>3D STRUCTURE CALCULATIONS</h2>
+
+        <p>
+            Complete both calculations to finish this training module.
+        </p>
+
+        <div class="calculationSection" id="baseAreaSection">
+
+            <h3>STEP 1: BASE AREA</h3>
+
+            <p>Calculate the area of your original 2D shape.</p>
+
+            <label for="baseAreaInput">Enter your answer (square units):</label>
+
+            <input
+                type="number"
+                id="baseAreaInput"
+                step="any"
+                placeholder="Base area"
+            >
+
+            <button onclick="checkBaseArea()">
+                Submit Answer
+            </button>
+
+            <p id="baseAreaFeedback" class="status"></p>
+
+        </div>
+
+
+        <div
+            class="calculationSection"
+            id="surfaceAreaSection"
+            style="display: none;"
+        >
+
+            <h3>STEP 2: TOTAL SURFACE AREA</h3>
+
+            <p>
+                Calculate the total surface area of your 3D structure.
+                Include every face and curved surface.
+            </p>
+
+            <label for="surfaceAreaInput">
+                Enter your answer (square units):
+            </label>
+
+            <input
+                type="number"
+                id="surfaceAreaInput"
+                step="any"
+                placeholder="Surface area"
+            >
+
+            <button onclick="checkSurfaceArea()">
+                Submit Answer
+            </button>
+
+            <p id="surfaceAreaFeedback" class="status"></p>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel" id="structureResult">
+
+        <h2>TRAINING MODULE COMPLETE</h2>
+
+        <img
+            id="structureImage"
+            src=""
+            alt="Your completed 3D structure"
+        >
+
+        <p id="completionMessage"></p>
+
+        <p>
+            Remember your key and building height for the next stage.
+        </p>
+
+        <button
+            id="nextModuleButton"
+            onclick="location.href='VolumeConstruct.html'"
+        >
+            Continue to Volume Construct
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // CANVAS SETUP
+
+    const canvas = document.getElementById("floor");
+    const ctx = canvas.getContext("2d");
+
+    const gridSize = 15;
+
+    let shapes = [];
+    let selectedShape = null;
+    let movingShape = false;
+
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    let buildingHeight = null;
+
+
+    // STRUCTURE IMAGES
+
+    const structureImages = {
+
+        circle:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVPlOKzcnQp8a43ZoRL9vlq3ApntBgAaWLQ0BmjvLkG-zYfirX_FADq2MU&s=10",
+
+        rectangle:
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjAsoL_vHYKdWiNklUi2bBfA7ZsHE_C6KinngZxoy5NlhPjvynsxJtdGOWXmdFG8Ge6rZl8SscR5QStcXma_dTryp-7ctBSl4_p2hueMc4AX3VN1hu0yPLpRcU5J1Vpan0LdT-ofFTiyNE/s1600/rectangular+prism.JPG",
+
+        triangle:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRobu1U31PJNthiVFifrfyYpNGaWbIAIuN0di2u7K6fXH1-6EpQmvLsUASo&s=10"
+
+    };
+
+
+    // HELPER FUNCTIONS
+
+    function snap(value) {
+        return Math.round(value / gridSize) * gridSize;
+    }
+
+
+    function getDimension(message) {
+
+        const response = prompt(message);
+
+        if (response === null || response.trim() === "") {
+            return null;
+        }
+
+        const value = Number(response);
+
+        if (!Number.isFinite(value) || value <= 0) {
+            alert("Enter a valid positive number.");
+            return null;
+        }
+
+        return Math.max(gridSize, Math.round(value * gridSize));
+    }
+
+
+    function getShapeWidth(shape) {
+
+        if (shape.type === "circle") {
+            return shape.radius * 2;
+        }
+
+        if (shape.type === "triangle") {
+            return shape.base;
+        }
+
+        return shape.width;
+    }
+
+
+    function getShapeHeight(shape) {
+
+        if (shape.type === "circle") {
+            return shape.radius * 2;
+        }
+
+        if (shape.type === "triangle") {
+            return shape.triangleHeight;
+        }
+
+        return shape.depth;
+    }
+
+
+    // GENERATE ONE SHAPE
+
+    function generateShape() {
+
+        if (shapes.length > 0) {
+            return;
+        }
+
+        const type = document.getElementById("shapeType").value;
+
+        let shape = { type: type, x: 0, y: 0 };
+
+        if (type === "rectangle") {
+
+            const width = getDimension("Enter rectangle width in units:");
+
+            if (width === null) return;
+
+            const depth = getDimension("Enter rectangle depth in units:");
+
+            if (depth === null) return;
+
+            shape.width = width;
+            shape.depth = depth;
+
+        }
+
+        else if (type === "circle") {
+
+            const radius = getDimension("Enter circle radius in units:");
+
+            if (radius === null) return;
+
+            shape.radius = radius;
+
+        }
+
+        else if (type === "triangle") {
+
+            const base = getDimension("Enter triangle base in units:");
+
+            if (base === null) return;
+
+            const triangleHeight = getDimension("Enter triangle height in units:");
+
+            if (triangleHeight === null) return;
+
+            shape.base = base;
+            shape.triangleHeight = triangleHeight;
+
+        }
+
+
+        if (
+            getShapeWidth(shape) > canvas.width ||
+            getShapeHeight(shape) > canvas.height
+        ) {
+            alert("These dimensions are too large for the grid.");
+            return;
+        }
+
+
+        shape.x = snap((canvas.width - getShapeWidth(shape)) / 2);
+        shape.y = snap((canvas.height - getShapeHeight(shape)) / 2);
+
+        shapes.push(shape);
+
+        document.getElementById("generateShapeButton").style.display = "none";
+        document.getElementById("shapeType").disabled = true;
+
+        document.getElementById("shapeStatus").textContent =
+            "Shape created. You can drag it around the grid.";
+
+        updateGenerateButton();
+        render();
+
+    }
+
+
+    // DRAW THE GRID
+
+    function drawGrid() {
+
+        ctx.strokeStyle = "#243247";
+        ctx.lineWidth = 1;
+
+        for (let x = 0; x <= canvas.width; x += gridSize) {
+
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+
+        }
+
+        for (let y = 0; y <= canvas.height; y += gridSize) {
+
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+
+        }
+
+    }
+
+
+    // DRAW SHAPES
+
+    function drawShapes() {
+
+        shapes.forEach(function(shape) {
+
+            ctx.fillStyle = "rgba(59, 130, 246, 0.3)";
+
+            ctx.strokeStyle =
+                shape === selectedShape ? "#fbbf24" : "#60a5fa";
+
+            ctx.lineWidth = 3;
+
+            ctx.beginPath();
+
+            if (shape.type === "rectangle") {
+
+                ctx.rect(
+                    shape.x,
+                    shape.y,
+                    shape.width,
+                    shape.depth
+                );
+
+            }
+
+            else if (shape.type === "circle") {
+
+                ctx.arc(
+                    shape.x + shape.radius,
+                    shape.y + shape.radius,
+                    shape.radius,
+                    0,
+                    Math.PI * 2
+                );
+
+            }
+
+            else if (shape.type === "triangle") {
+
+                ctx.moveTo(
+                    shape.x + shape.base / 2,
+                    shape.y
+                );
+
+                ctx.lineTo(
+                    shape.x + shape.base,
+                    shape.y + shape.triangleHeight
+                );
+
+                ctx.lineTo(
+                    shape.x,
+                    shape.y + shape.triangleHeight
+                );
+
+                ctx.closePath();
+
+            }
+
+            ctx.fill();
+            ctx.stroke();
+
+        });
+
+    }
+
+
+    function render() {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawGrid();
+        drawShapes();
+
+    }
+
+
+    // GET MOUSE POSITION
+
+    function getPosition(event) {
+
+        const rect = canvas.getBoundingClientRect();
+
+        return {
+            x: (event.clientX - rect.left) * canvas.width / rect.width,
+            y: (event.clientY - rect.top) * canvas.height / rect.height
+        };
+
+    }
+
+
+    // CHECK IF POINT IS INSIDE TRIANGLE
+
+    function pointInTriangle(px, py, x1, y1, x2, y2, x3, y3) {
+
+        const denominator =
+            (y2 - y3) * (x1 - x3) +
+            (x3 - x2) * (y1 - y3);
+
+        if (denominator === 0) return false;
+
+        const a =
+            ((y2 - y3) * (px - x3) +
+            (x3 - x2) * (py - y3)) / denominator;
+
+        const b =
+            ((y3 - y1) * (px - x3) +
+            (x1 - x3) * (py - y3)) / denominator;
+
+        const c = 1 - a - b;
+
+        return a >= 0 && b >= 0 && c >= 0;
+
+    }
+
+
+    // FIND SHAPE UNDER MOUSE
+
+    function findShape(x, y) {
+
+        for (let i = shapes.length - 1; i >= 0; i--) {
+
+            const shape = shapes[i];
+
+            if (shape.type === "rectangle") {
+
+                if (
+                    x >= shape.x &&
+                    x <= shape.x + shape.width &&
+                    y >= shape.y &&
+                    y <= shape.y + shape.depth
+                ) {
+                    return shape;
+                }
+
+            }
+
+            else if (shape.type === "circle") {
+
+                const centerX = shape.x + shape.radius;
+                const centerY = shape.y + shape.radius;
+
+                const distance = Math.sqrt(
+                    (x - centerX) ** 2 +
+                    (y - centerY) ** 2
+                );
+
+                if (distance <= shape.radius) {
+                    return shape;
+                }
+
+            }
+
+            else if (shape.type === "triangle") {
+
+                const inside = pointInTriangle(
+                    x, y,
+                    shape.x + shape.base / 2, shape.y,
+                    shape.x + shape.base, shape.y + shape.triangleHeight,
+                    shape.x, shape.y + shape.triangleHeight
+                );
+
+                if (inside) {
+                    return shape;
+                }
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+
+    // MOVE SHAPES
+
+    canvas.addEventListener("pointerdown", function(event) {
+
+        const position = getPosition(event);
+
+        selectedShape = findShape(position.x, position.y);
+
+        if (selectedShape !== null) {
+
+            movingShape = true;
+
+            dragOffsetX = position.x - selectedShape.x;
+            dragOffsetY = position.y - selectedShape.y;
+
+            canvas.setPointerCapture(event.pointerId);
+
+            render();
+
+        }
+
+    });
+
+
+    canvas.addEventListener("pointermove", function(event) {
+
+        if (!movingShape || selectedShape === null) {
+            return;
+        }
+
+        const position = getPosition(event);
+
+        let newX = snap(position.x - dragOffsetX);
+        let newY = snap(position.y - dragOffsetY);
+
+        const maxX = canvas.width - getShapeWidth(selectedShape);
+        const maxY = canvas.height - getShapeHeight(selectedShape);
+
+        newX = Math.max(0, Math.min(newX, maxX));
+        newY = Math.max(0, Math.min(newY, maxY));
+
+        selectedShape.x = newX;
+        selectedShape.y = newY;
+
+        render();
+
+    });
+
+
+    function stopMoving() {
+
+        movingShape = false;
+        selectedShape = null;
+
+        render();
+
+    }
+
+
+    canvas.addEventListener("pointerup", stopMoving);
+    canvas.addEventListener("pointercancel", stopMoving);
+
+
+    // LOCK BUILDING HEIGHT
+
+    function lockHeight() {
+
+        const input = document.getElementById("heightInput");
+
+        if (input.value.trim() === "") {
+            alert("Enter a building height first.");
+            return;
+        }
+
+        const height = Number(input.value);
+
+        if (!Number.isFinite(height) || height <= 0) {
+            alert("Enter a valid positive number.");
+            return;
+        }
+
+        buildingHeight = height;
+
+        localStorage.setItem("buildingHeight", String(buildingHeight));
+
+        input.disabled = true;
+
+        document.getElementById("lockHeightButton").disabled = true;
+
+        document.getElementById("heightStatus").textContent =
+            "Building height locked: " + buildingHeight + " units.";
+
+        updateGenerateButton();
+
+    }
+
+
+    // UPDATE GENERATE 3D BUTTON
+
+    function updateGenerateButton() {
+
+        const button = document.getElementById("generate3dButton");
+
+        const ready = shapes.length > 0 && buildingHeight !== null;
+
+        button.disabled = !ready;
+
+        if (ready) {
+
+            document.getElementById("generateStatus").textContent =
+                "Shape created and height locked. You can now generate your 3D structure.";
+
+        } else {
+
+            document.getElementById("generateStatus").textContent =
+                "Create a shape and lock your height to continue.";
+
+        }
+
+    }
+
+
+    // GENERATE 3D
+
+    function generate3d() {
+
+        if (shapes.length === 0 || buildingHeight === null) {
+
+            alert("Create a shape and lock your height first.");
+            return;
+
+        }
+
+        document.getElementById("generate3dButton").style.display = "none";
+
+        document.getElementById("calculationArea").style.display = "block";
+
+        document.getElementById("baseAreaSection").style.display = "block";
+
+        document.getElementById("surfaceAreaSection").style.display = "none";
+
+        document.getElementById("baseAreaInput").value = "";
+        document.getElementById("surfaceAreaInput").value = "";
+
+        document.getElementById("baseAreaFeedback").textContent = "";
+        document.getElementById("surfaceAreaFeedback").textContent = "";
+
+    }
+
+
+    // CALCULATE BASE AREA
+
+    function calculateArea(shape) {
+
+        if (shape.type === "rectangle") {
+
+            const width = shape.width / gridSize;
+            const depth = shape.depth / gridSize;
+
+            return width * depth;
+
+        }
+
+        if (shape.type === "circle") {
+
+            const radius = shape.radius / gridSize;
+
+            return Math.PI * radius ** 2;
+
+        }
+
+        if (shape.type === "triangle") {
+
+            const base = shape.base / gridSize;
+            const height = shape.triangleHeight / gridSize;
+
+            return base * height / 2;
+
+        }
+
+    }
+
+
+    // CHECK BASE AREA
+
+    function checkBaseArea() {
+
+        const input = document.getElementById("baseAreaInput");
+
+        if (input.value.trim() === "") {
+            alert("Enter your base area answer.");
+            return;
+        }
+
+        const answer = Number(input.value);
+
+        if (!Number.isFinite(answer)) {
+            alert("Enter a valid number.");
+            return;
+        }
+
+        const correctAnswer = calculateArea(shapes[0]);
+
+        const tolerance = Math.max(0.01, Math.abs(correctAnswer) * 0.001);
+
+        if (Math.abs(answer - correctAnswer) <= tolerance) {
+
+            document.getElementById("baseAreaFeedback").textContent =
+                "Correct! Your base area is verified.";
+
+            document.getElementById("surfaceAreaSection").style.display = "block";
+
+        } else {
+
+            document.getElementById("baseAreaFeedback").textContent =
+                "Not quite. Check your calculations and try again.";
+
+        }
+
+    }
+
+
+    // CALCULATE TOTAL SURFACE AREA
+
+    function calculateSurfaceArea(shape) {
+
+        const height = buildingHeight;
+
+        if (shape.type === "rectangle") {
+
+            const width = shape.width / gridSize;
+            const depth = shape.depth / gridSize;
+
+            return 2 * (
+                width * depth +
+                width * height +
+                depth * height
+            );
+
+        }
+
+        if (shape.type === "circle") {
+
+            const radius = shape.radius / gridSize;
+
+            return (
+                2 * Math.PI * radius ** 2 +
+                2 * Math.PI * radius * height
+            );
+
+        }
+
+        if (shape.type === "triangle") {
+
+            const base = shape.base / gridSize;
+            const triangleHeight = shape.triangleHeight / gridSize;
+
+            const baseArea = base * triangleHeight / 2;
+
+            const side = Math.sqrt(
+                (base / 2) ** 2 + triangleHeight ** 2
+            );
+
+            const perimeter = base + 2 * side;
+
+            return 2 * baseArea + perimeter * height;
+
+        }
+
+    }
+
+
+    // CHECK SURFACE AREA
+
+    function checkSurfaceArea() {
+
+        const input = document.getElementById("surfaceAreaInput");
+
+        if (input.value.trim() === "") {
+            alert("Enter your surface area answer.");
+            return;
+        }
+
+        const answer = Number(input.value);
+
+        if (!Number.isFinite(answer)) {
+            alert("Enter a valid number.");
+            return;
+        }
+
+        const correctAnswer = calculateSurfaceArea(shapes[0]);
+
+        const tolerance = Math.max(0.01, Math.abs(correctAnswer) * 0.001);
+
+        if (Math.abs(answer - correctAnswer) <= tolerance) {
+
+            document.getElementById("surfaceAreaFeedback").textContent =
+                "Correct! Total surface area verified.";
+
+            showStructure();
+
+        } else {
+
+            document.getElementById("surfaceAreaFeedback").textContent =
+                "Not quite. Check your calculations and try again.";
+
+        }
+
+    }
+
+
+    // SHOW COMPLETION SCREEN
+
+    function showStructure() {
+
+        const shapeType = shapes[0].type;
+
+        const image = document.getElementById("structureImage");
+
+        image.style.display = "block";
+        image.src = structureImages[shapeType];
+
+        image.onerror = function() {
+            image.style.display = "none";
+        };
+
+        document.getElementById("calculationArea").style.display = "none";
+
+        document.getElementById("structureResult").style.display = "block";
+
+        document.getElementById("completionMessage").textContent =
+            "Your key is 7, remember it.";
+
+        localStorage.setItem("floorplanKey", "7");
+        localStorage.setItem("buildingHeight", String(buildingHeight));
+
+    }
+
+
+    // RESET EVERYTHING
+
+    function clearFloor() {
+
+        shapes = [];
+        selectedShape = null;
+        movingShape = false;
+
+        buildingHeight = null;
+
+        localStorage.removeItem("buildingHeight");
+        localStorage.removeItem("floorplanKey");
+
+        document.getElementById("generateShapeButton").style.display = "inline-block";
+        document.getElementById("generateShapeButton").disabled = false;
+
+        document.getElementById("shapeType").disabled = false;
+
+        document.getElementById("heightInput").value = "";
+        document.getElementById("heightInput").disabled = false;
+
+        document.getElementById("lockHeightButton").disabled = false;
+
+        document.getElementById("generate3dButton").style.display = "inline-block";
+
+        document.getElementById("calculationArea").style.display = "none";
+
+        document.getElementById("baseAreaInput").value = "";
+        document.getElementById("surfaceAreaInput").value = "";
+
+        document.getElementById("baseAreaFeedback").textContent = "";
+        document.getElementById("surfaceAreaFeedback").textContent = "";
+
+        document.getElementById("surfaceAreaSection").style.display = "none";
+
+        document.getElementById("heightStatus").textContent = "";
+        document.getElementById("shapeStatus").textContent = "";
+
+        document.getElementById("structureResult").style.display = "none";
+
+        document.getElementById("structureImage").src = "";
+        document.getElementById("structureImage").style.display = "block";
+
+        updateGenerateButton();
+        render();
+
+    }
+
+
+    // INITIALIZE
+
+    render();
+    updateGenerateButton();
+
+</script>
+
+</body>
+</html>

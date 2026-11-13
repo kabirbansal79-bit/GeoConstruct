@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX Architecture - Semifinal Mission</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #111827;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #container {
+            width: 90%;
+            max-width: 750px;
+            background: #1f2937;
+            padding: 35px;
+            border-radius: 15px;
+            text-align: center;
+            box-sizing: border-box;
+            border: 1px solid #374151;
+        }
+
+        h1 {
+            color: #60a5fa;
+            letter-spacing: 3px;
+        }
+
+        h2 {
+            color: #38bdf8;
+            margin-top: 30px;
+        }
+
+        p {
+            color: #d1d5db;
+            line-height: 1.7;
+        }
+
+        .keys {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .key {
+            background: #111827;
+            border: 1px solid #3b82f6;
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .key h3 {
+            color: #60a5fa;
+        }
+
+        .key p {
+            font-size: 20px;
+            color: white;
+            font-weight: bold;
+        }
+
+        input {
+            width: 80%;
+            max-width: 300px;
+            padding: 13px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border: 1px solid #60a5fa;
+            background: #111827;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            margin: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #38bdf8;
+            color: #111827;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #continueButton {
+            display: none;
+            background: #059669;
+        }
+
+        #continueButton:hover {
+            background: #34d399;
+        }
+
+        .small-text {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        @media (max-width: 550px) {
+            .keys {
+                flex-direction: column;
+            }
+
+            #container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+
+        <h1>APEX ARCHITECTURE GROUP</h1>
+
+        <p>CLASSIFIED ENGINEERING DIVISION</p>
+
+        <h2>SEMIFINAL MISSION</h2>
+
+        <p>
+            Your previous training simulations have provided you
+            with two important keys.
+        </p>
+
+        <div class="keys">
+
+            <div class="key">
+                <h3>KEY 1</h3>
+                <p id="radiusDisplay">Radius</p>
+            </div>
+
+            <div class="key">
+                <h3>KEY 2</h3>
+                <p id="heightDisplay">Height</p>
+            </div>
+
+        </div>
+
+        <h2>MISSION OBJECTIVE</h2>
+
+        <p>
+            Use your two keys to determine the volume of a cone.
+            Enter your final answer in terms of π.
+        </p>
+
+        <p class="small-text">
+            Example: If your answer is 24π, enter 24π.
+        </p>
+
+        <input
+            type="text"
+            id="answer"
+            placeholder="Enter your answer"
+            autocomplete="off"
+        >
+
+        <br>
+
+        <button onclick="checkAnswer()">
+            SUBMIT ANSWER
+        </button>
+
+        <p id="feedback"></p>
+
+        <button id="continueButton"
+            onclick="location.href='FinalMission.html'">
+            CONTINUE TO FINAL MISSION →
+        </button>
+
+    </div>
+
+    <script>
+
+        // Retrieve the two keys from the previous mission
+
+        const radius = Number(localStorage.getItem("coneRadius"));
+        const height = Number(localStorage.getItem("coneHeight"));
+
+        // Display the keys
+
+        document.getElementById("radiusDisplay").textContent =
+            "Radius: " + radius + " units";
+
+        document.getElementById("heightDisplay").textContent =
+            "Height: " + height + " units";
+
+
+        function checkAnswer() {
+
+            const input = document.getElementById("answer");
+            const feedback = document.getElementById("feedback");
+
+            const userInput = input.value.trim().toLowerCase()
+                .replace(/\s/g, "")
+                .replace(/π/g, "pi");
+
+            if (userInput === "") {
+                feedback.textContent = "Enter your answer first.";
+                return;
+            }
+
+            // Accept answers such as 24π, 24pi or 24*pi
+
+            const coefficientText = userInput.replace(/\*?pi$/, "");
+
+            if (coefficientText === "" ||
+                !/^-?\d+(\.\d+)?$/.test(coefficientText)) {
+                feedback.textContent =
+                    "Please enter a valid answer in terms of π.";
+                return;
+            }
+
+            const userAnswer = Number(coefficientText);
+
+            // Calculate the correct volume internally
+
+            const correctAnswer =
+                (radius * radius * height) / 3;
+
+            if (Math.abs(userAnswer - correctAnswer) <= 0.01) {
+
+                feedback.innerHTML =
+                    "CORRECT! You have successfully completed the semifinal mission." +
+                    "<br><br>" +
+                    "Remember: A cone has one-third the volume of a cylinder " +
+                    "with the same dimensions.";
+
+                feedback.style.color = "#34d399";
+
+                document.getElementById("continueButton").style.display =
+                    "inline-block";
+
+                input.disabled = true;
+
+                localStorage.setItem("semifinalComplete", "true");
+
+            } else {
+
+                feedback.textContent =
+                    "Not quite. Review your keys and try again.";
+
+                feedback.style.color = "#f87171";
+
+            }
+        }
+
+        // Check that the previous mission supplied both keys
+
+        if (
+            !Number.isFinite(radius) ||
+            !Number.isFinite(height) ||
+            radius <= 0 ||
+            height <= 0
+        ) {
+            document.getElementById("container").innerHTML =
+                "<h1>MISSION ERROR</h1>" +
+                "<p>Your previous mission keys could not be found.</p>" +
+                "<button onclick=\"location.href='VolumeConstruct.html'\">" +
+                "RETURN TO TRAINING</button>";
+        }
+
+    </script>
+
+</body>
+</html>

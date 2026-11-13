@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction</title>
+
+    <style>
+        body {
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url("https://d3jddrml5mymee.cloudfront.net/assets/blog/wp-content/uploads/2013/06/future_City_desgns.jpg");
+                
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #101827;
+
+            color: white;
+            font-family: Arial, sans-serif;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            width: 90%;
+            max-width: 850px;
+            text-align: center;
+        }
+
+        #story {
+            font-size: clamp(22px, 4vw, 32px);
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 1.5s;
+        }
+
+        button {
+            display: none;
+            margin: 30px auto 0;
+            padding: 12px 25px;
+            background: #1685db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button:hover {
+            background: #0865b5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+
+        <div id="story"></div>
+
+        <button id="start" onclick="location.href = 'Floorplan.html'">
+            I'm ready
+        </button>
+
+    </div>
+
+    <script>
+
+        
+const story = document.getElementById("story");
+const start = document.getElementById("start");
+
+let currentScene = 0;
+
+const scenes = [
+    "The year is 2070...",
+    "The city of Cylinder City has become one of the greatest architectural achievements in human history.",
+    "But something has gone terribly wrong...",
+    "A mysterious virus known as DIMENSION ZERO has been discovered.",
+    "It is spreading fast. The future of Cylinder City could be destroyed.",
+    "The virus duplicates itself at an alarming rate, and it is almost impossible to contain.",
+    "Luckily, the government and military have been able to seal the virus inside a secure containment structure.",
+    "YOUR OBJECTIVE: Find how much steel is needed to seal the structure and how much containment liquid is required to contain the virus.",
+    "Before you can begin the final mission, you must complete two training simulations.",
+    "TRAINING SIMULATION 1: FLOOR PLAN DESIGN",
+    "Design a simple 2D floor plan using basic shapes.",
+    "Give your shapes height to transform your floor plan into a 3D structure.",
+    "Calculate the total surface area of your building to prove your design is accurate.",
+    "TRAINING SIMULATION 2: VOLUME CONSTRUCT",
+    "Combine different 3D shapes and calculate their total volume.",
+    "You must demonstrate that you understand how to calculate the volume of complex structures.",
+    "FINAL MISSION: DIMENSION ZERO CONTAINMENT",
+    "Your final structure consists of a sphere with four attached rectangular prisms.",
+    "OBJECTIVE 1: Calculate the total volume of the structure to determine how much containment liquid is required.",
+    "OBJECTIVE 2: Calculate the total surface area to determine how much coating is needed to seal the structure.",
+    "Accuracy is critical. Every calculation must be correct.",
+    "In the training simulations, you will be given 2 codes that will help you unlock the final mission. REMEMBER THEM",
+    "The correct code is the only way to activate the containment system.",
+    "You have one mission. One chance. The future of Cylinder City is in your hands.",
+    "MISSION ACCEPTED?"
+];
+
+function showScene() {
+    story.textContent = scenes[currentScene];
+    story.style.opacity = 1;
+
+    currentScene++;
+
+    setTimeout(() => {
+        story.style.opacity = 0;
+
+        setTimeout(() => {
+            if (currentScene < scenes.length) {
+                showScene();
+            } else {
+                start.style.display = "block";
+            }
+        }, 1500);
+
+    }, 3000);
+}
+
+showScene();
+
+    </script>
+
+</body>
+</html>
