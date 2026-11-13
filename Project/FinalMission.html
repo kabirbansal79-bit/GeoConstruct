@@ -1,584 +1,596 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APEX Architecture - Volume Training</title>
+    <title>Final Mission</title>
 
     <style>
         body {
             margin: 0;
-            padding: 30px 15px;
-            background: #111827;
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(10, 15, 30, 0.88), rgba(10, 15, 30, 0.95)),
+                url("https://d3jddrml5mymee.cloudfront.net/assets/blog/wp-content/uploads/2013/06/future_City_desgns.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: white;
             font-family: Arial, sans-serif;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .container {
-            max-width: 850px;
-            margin: auto;
+        #container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(31, 41, 55, 0.96);
+            padding: 35px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #374151;
+            box-sizing: border-box;
         }
 
         h1 {
             color: #60a5fa;
-            margin-bottom: 5px;
+            letter-spacing: 3px;
         }
 
         h2 {
-            color: #93c5fd;
-        }
-
-        p {
-            line-height: 1.6;
-        }
-
-        .panel {
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 12px;
-            padding: 25px;
+            color: #38bdf8;
             margin-top: 25px;
         }
 
-        #objectImage {
-            width: 260px;
-            height: 220px;
-            object-fit: contain;
-            background: white;
-            border-radius: 10px;
-            padding: 10px;
-            margin: 15px auto;
+        p {
+            color: #d1d5db;
+            line-height: 1.7;
         }
 
-        .dimensions {
-            background: #111827;
-            border-radius: 8px;
+        .story {
+            font-size: clamp(20px, 3vw, 29px);
+            min-height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 1s;
+            line-height: 1.5;
             padding: 15px;
-            margin: 20px auto;
-            max-width: 450px;
-            text-align: left;
-        }
-
-        .dimensions p {
-            margin: 7px 0;
-        }
-
-        input {
-            display: block;
-            width: 80%;
-            max-width: 300px;
-            padding: 12px;
-            margin: 12px auto;
-            border: 1px solid #4b5563;
-            border-radius: 6px;
-            background: #111827;
-            color: white;
-            font-size: 16px;
-            text-align: center;
         }
 
         button {
             background: #2563eb;
             color: white;
             border: none;
-            padding: 12px 24px;
-            margin: 10px;
+            padding: 13px 25px;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
+            margin: 10px;
+            transition: 0.2s;
         }
 
         button:hover {
-            background: #1d4ed8;
+            background: #38bdf8;
+            color: #111827;
         }
 
-        button:disabled {
-            background: #4b5563;
-            cursor: not-allowed;
+        input {
+            width: 80%;
+            max-width: 320px;
+            padding: 13px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border: 1px solid #60a5fa;
+            background: #111827;
+            color: white;
+            font-size: 17px;
+            text-align: center;
         }
 
-        #feedback {
+        .section {
+            background: #111827;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #374151;
+        }
+
+        .measurements {
+            color: #93c5fd;
+            line-height: 2;
+        }
+
+        .feedback {
             font-weight: bold;
             margin-top: 15px;
         }
 
-        .progress {
-            color: #93c5fd;
-            font-size: 15px;
-        }
-
-        .instructions {
-            color: #d1d5db;
-            font-size: 14px;
-        }
-
-        #nextButton {
-            display: none;
-        }
-
-        #answerSection {
-            margin-top: 20px;
-        }
-
-        #completionSection {
-            display: none;
-        }
-
         .success {
-            color: #4ade80;
+            color: #34d399;
         }
 
         .error {
             color: #f87171;
+        }
+
+        .smallText {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        #missionSection,
+        #surfaceSection,
+        #securitySection {
+            display: none;
+        }
+
+        #startButton {
+            display: none;
+        }
+
+        .optionButton {
+            min-width: 100px;
+            font-size: 18px;
+        }
+
+        @media (max-width: 550px) {
+            #container {
+                padding: 20px;
+            }
+
+            .story {
+                min-height: 160px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div id="container">
 
-    <h1>APEX ARCHITECTURE GROUP</h1>
-    <h2>Volume Construct Training</h2>
+        <p>VIRUS CONTAINMENT</p>
 
-    <p>
-        Before entering the next stage of your mission,
-        you must successfully calculate the volume of all four structures.
-    </p>
 
-    <div class="panel">
+        <!-- STORY BRIEFING -->
 
-        <p class="progress" id="progress">OBJECT 1 OF 4</p>
+        <div id="briefingSection">
 
-        <h2 id="objectTitle">Ice Cream Cone</h2>
+            <h2>FINAL MISSION BRIEFING</h2>
 
-        <img id="objectImage" src="" alt="3D structure">
+            <div id="story" class="story"></div>
 
-        <p id="objectDescription"></p>
-
-        <div class="dimensions">
-            <h3>Structure Measurements</h3>
-            <div id="dimensionDetails"></div>
-        </div>
-
-        <p class="instructions" id="answerInstructions"></p>
-
-        <div id="answerSection">
-
-            <div id="piAnswerArea">
-                <input
-                    type="number"
-                    id="piAnswer"
-                    step="any"
-                    placeholder="Enter the coefficient of π"
-                >
-            </div>
-
-            <div id="decimalAnswerArea" style="display:none;">
-                <input
-                    type="number"
-                    id="decimalAnswer"
-                    step="any"
-                    placeholder="Enter the volume"
-                >
-            </div>
-
-            <div id="rocketAnswerArea" style="display:none;">
-                <input
-                    type="number"
-                    id="rocketPiAnswer"
-                    step="any"
-                    placeholder="Enter the coefficient of π"
-                >
-
-                <input
-                    type="number"
-                    id="rocketDecimalAnswer"
-                    step="any"
-                    placeholder="Enter the non-π volume"
-                >
-            </div>
-
-            <button onclick="checkAnswer()" id="checkButton">
-                Check Answer
+            <button id="startButton" onclick="startMission()">
+                BEGIN FINAL MISSION →
             </button>
 
         </div>
 
-        <p id="feedback"></p>
 
-        <button id="nextButton" onclick="nextObject()">
-            Next Object
-        </button>
+        <!-- FINAL MISSION -->
 
-        <div id="completionSection">
-            <h2 class="success">TRAINING COMPLETE</h2>
+        <div id="missionSection">
+
+            <h2>DIMENSION ZERO CONTAINMENT</h2>
 
             <p>
-                All four structures have been successfully calculated.
-                You are cleared to proceed to the semifinal mission.
+                Your containment structure is ready for final inspection.
+                Calculate the required containment liquid and steel
+                before the structure can be sealed.
             </p>
 
-            <button onclick="continueToSemifinal()">
-                Proceed to Semifinal Mission →
-            </button>
+            <div class="section">
+
+                <h3>STRUCTURE MEASUREMENTS</h3>
+
+                <div class="measurements">
+                    Sphere radius: 5 units<br>
+                    Number of rectangular prisms: 4<br>
+                    Each prism length: 4 units<br>
+                    Each prism width: 1 unit<br>
+                    Each prism height: 1 unit
+                </div>
+
+                <p class="smallText">
+                    For this simplified model, each prism connection hides
+                    a 1-unit² face on the prism and an equal 1-unit² patch
+                    on the sphere.
+                </p>
+
+            </div>
+
+
+            <!-- VOLUME CALCULATION -->
+
+            <div class="section" id="volumeSection">
+
+                <h3>OBJECTIVE 1: CONTAINMENT LIQUID</h3>
+
+                <p>
+                    Calculate the total volume of the sphere and
+                    all four attached rectangular prisms.
+                </p>
+
+                <p>
+                    Round your answer to 2 decimal places.
+                </p>
+
+                <input
+                    type="number"
+                    id="volumeAnswer"
+                    step="any"
+                    placeholder="Enter total volume"
+                >
+
+                <br>
+
+                <button onclick="checkVolume()">
+                    VERIFY VOLUME
+                </button>
+
+                <p id="volumeFeedback" class="feedback"></p>
+
+            </div>
+
+
+            <!-- SURFACE AREA CALCULATION -->
+
+            <div class="section" id="surfaceSection">
+
+                <h3>OBJECTIVE 2: REINFORCEMENT STEEL</h3>
+
+                <p>
+                    Calculate the total exposed surface area
+                    of the containment structure.
+                </p>
+
+                <p>
+                    Remember to account for the hidden connection surfaces.
+                    Round your answer to 2 decimal places.
+                </p>
+
+                <input
+                    type="number"
+                    id="surfaceAnswer"
+                    step="any"
+                    placeholder="Enter total surface area"
+                >
+
+                <br>
+
+                <button onclick="checkSurfaceArea()">
+                    VERIFY SURFACE AREA
+                </button>
+
+                <p id="surfaceFeedback" class="feedback"></p>
+
+            </div>
+
+
+            <!-- FINAL SECURITY QUESTION -->
+
+            <div class="section" id="securitySection">
+
+                <h3>FINAL SECURITY CHECK</h3>
+
+                <p>
+                    Your containment calculations have been verified.
+                    Complete the final engineering question.
+                </p>
+
+                <h2>
+                    If the radius of a sphere doubles,
+                    by what factor does its volume increase?
+                </h2>
+
+                <p class="smallText">
+                    Select the correct answer.
+                </p>
+
+                <button class="optionButton" onclick="checkSecurity(2)">
+                    2 times
+                </button>
+
+                <button class="optionButton" onclick="checkSecurity(3)">
+                    3 times
+                </button>
+
+                <button class="optionButton" onclick="checkSecurity(4)">
+                    4 times
+                </button>
+
+                <button class="optionButton" onclick="checkSecurity(8)">
+                    8 times
+                </button>
+
+                <p id="securityFeedback" class="feedback"></p>
+
+            </div>
+
         </div>
 
     </div>
 
-</div>
 
-<script>
+    <script>
 
-    // Images for the four objects
+        // CORRECT CALCULATIONS
 
-    const imageLinks = {
-        iceCream: "https://commons.wikimedia.org/wiki/Special:FilePath/Ice-cream.svg",
+        const sphereRadius = 5;
 
-        house: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLrEjFCJvTeYxJ6MdUrhJypxV-8kpkXtdYblxo7jp4C5Gj_mADpeT6TOtt&s=10",
+        const numberOfPrisms = 4;
+        const prismLength = 4;
+        const prismWidth = 1;
+        const prismHeight = 1;
 
-        popCan: "https://commons.wikimedia.org/wiki/Special:FilePath/Soft_Drink.svg",
+        // Volume of the sphere and four rectangular prisms
 
-        rocket: "https://as1.ftcdn.net/v2/jpg/02/37/96/12/1000_F_237961249_wepyvJn0CRDShRyY881yYUWdmNco3UJq.jpg"
-    };
+        const sphereVolume =
+            (4 / 3) * Math.PI * Math.pow(sphereRadius, 3);
 
+        const prismVolume =
+            prismWidth * prismHeight * prismLength;
 
-    // The four objects must be completed in this order
+        const correctVolume =
+            sphereVolume + numberOfPrisms * prismVolume;
 
-    const objects = ["iceCream", "house", "popCan", "rocket"];
 
-    let currentIndex = 0;
-    let selectedShape = "";
-    let dimensions = {};
+        // Surface area calculation
 
-    let correctPiCoefficient = 0;
-    let correctDecimalVolume = 0;
+        const sphereSurfaceArea =
+            4 * Math.PI * Math.pow(sphereRadius, 2);
 
-
-    function randomNumber() {
-        return Math.floor(Math.random() * 5) + 3;
-    }
-
-
-    function newChallenge() {
-
-        selectedShape = objects[currentIndex];
-
-        dimensions = {};
-
-        document.getElementById("progress").textContent =
-            "OBJECT " + (currentIndex + 1) + " OF 4";
-
-        document.getElementById("feedback").textContent = "";
-
-        document.getElementById("nextButton").style.display = "none";
-
-        document.getElementById("answerSection").style.display = "block";
-
-        document.getElementById("checkButton").disabled = false;
-
-        document.getElementById("piAnswer").value = "";
-        document.getElementById("decimalAnswer").value = "";
-        document.getElementById("rocketPiAnswer").value = "";
-        document.getElementById("rocketDecimalAnswer").value = "";
-
-        document.getElementById("piAnswerArea").style.display = "none";
-        document.getElementById("decimalAnswerArea").style.display = "none";
-        document.getElementById("rocketAnswerArea").style.display = "none";
-
-        document.getElementById("completionSection").style.display = "none";
-
-
-        if (selectedShape === "iceCream") {
-
-            const radius = randomNumber();
-            const coneHeight = randomNumber();
-
-            dimensions.radius = radius;
-            dimensions.coneHeight = coneHeight;
-
-            correctPiCoefficient =
-                (radius * radius * coneHeight / 3) +
-                (2 * Math.pow(radius, 3) / 3);
-
-            correctDecimalVolume = 0;
-
-            document.getElementById("objectTitle").textContent =
-                "Ice Cream Cone";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure consists of a cone with a hemisphere on top. Both parts have the same radius.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Radius: " + radius + " units</p>" +
-                "<p>Cone height: " + coneHeight + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the total volume. Enter only the coefficient of π. For example, if your answer is 24π, enter 24.";
-
-            document.getElementById("piAnswerArea").style.display = "block";
-
-        }
-
-
-        else if (selectedShape === "house") {
-
-            const side = randomNumber();
-            const roofHeight = randomNumber();
-
-            dimensions.side = side;
-            dimensions.roofHeight = roofHeight;
-
-            correctDecimalVolume =
-                Math.round(
-                    (Math.pow(side, 3) +
-                    (Math.pow(side, 2) * roofHeight / 3)) * 100
-                ) / 100;
-
-            correctPiCoefficient = 0;
-
-            document.getElementById("objectTitle").textContent =
-                "House";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure consists of a cube with a square pyramid on top. The pyramid has the same base dimensions as the cube.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Cube side length: " + side + " units</p>" +
-                "<p>Pyramid height: " + roofHeight + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the total volume and round your answer to 2 decimal places.";
-
-            document.getElementById("decimalAnswerArea").style.display = "block";
-
-        }
-
-
-        else if (selectedShape === "popCan") {
-
-            const radius = randomNumber();
-            const height = randomNumber();
-
-            dimensions.radius = radius;
-            dimensions.height = height;
-
-            correctPiCoefficient =
-                radius * radius * height;
-
-            correctDecimalVolume = 0;
-
-            document.getElementById("objectTitle").textContent =
-                "Pop Can";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure is a cylinder.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Radius: " + radius + " units</p>" +
-                "<p>Height: " + height + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the volume. Enter only the coefficient of π.";
-
-            document.getElementById("piAnswerArea").style.display = "block";
-
-        }
-
-
-        else if (selectedShape === "rocket") {
-
-            const radius = randomNumber();
-            const bodyHeight = randomNumber();
-            const coneHeight = randomNumber();
-
-            const finBase = randomNumber();
-            const finHeight = randomNumber();
-            const finDepth = randomNumber();
-
-            dimensions.radius = radius;
-            dimensions.bodyHeight = bodyHeight;
-            dimensions.coneHeight = coneHeight;
-            dimensions.finBase = finBase;
-            dimensions.finHeight = finHeight;
-            dimensions.finDepth = finDepth;
-
-            // Cylinder and cone contribute the π part.
-            correctPiCoefficient =
-                (radius * radius * bodyHeight) +
-                (radius * radius * coneHeight / 3);
-
-            // Two triangular prism fins contribute the non-π part.
-            correctDecimalVolume =
-                finBase * finHeight * finDepth;
-
-            correctDecimalVolume =
-                Math.round(correctDecimalVolume * 100) / 100;
-
-            document.getElementById("objectTitle").textContent =
-                "Rocket Ship";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure consists of a cylinder, a cone, and two identical triangular prism fins.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Body radius: " + radius + " units</p>" +
-                "<p>Body height: " + bodyHeight + " units</p>" +
-                "<p>Nose cone height: " + coneHeight + " units</p>" +
-                "<p>Each fin triangle base: " + finBase + " units</p>" +
-                "<p>Each fin triangle height: " + finHeight + " units</p>" +
-                "<p>Each fin prism depth: " + finDepth + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the total volume. Enter the coefficient of π in the first box and the combined volume of the fins in the second box. Round the non-π part to 2 decimal places.";
-
-            document.getElementById("rocketAnswerArea").style.display =
-                "block";
-
-        }
-
-
-        showShape();
-
-    }
-
-
-    function showShape() {
-
-        document.getElementById("objectImage").src =
-            imageLinks[selectedShape];
-
-    }
-
-
-    function checkAnswer() {
-
-        let correct = false;
-
-        if (selectedShape === "iceCream" ||
-            selectedShape === "popCan") {
-
-            const answer = Number(
-                document.getElementById("piAnswer").value
+        const prismSurfaceArea =
+            2 * (
+                prismLength * prismWidth +
+                prismLength * prismHeight +
+                prismWidth * prismHeight
             );
 
-            if (document.getElementById("piAnswer").value.trim() === "") {
-                alert("Please enter an answer.");
+        // Remove the hidden 1 × 1 connection face from each prism
+        const exposedPrismArea =
+            prismSurfaceArea - (prismWidth * prismHeight);
+
+        // Remove the four matching connection patches from the sphere
+        const exposedSphereArea =
+            sphereSurfaceArea -
+            numberOfPrisms * (prismWidth * prismHeight);
+
+        const correctSurfaceArea =
+            exposedSphereArea +
+            numberOfPrisms * exposedPrismArea;
+
+
+        // STORY ANIMATION
+
+        const scenes = [
+
+            "You have been selected for the final mission of the APEX Architecture Group.",
+
+            "The structure requires an exact quantity of containment liquid and reinforced steel to remain secure.",
+
+            "APEX Architecture Group has selected you to complete the final engineering calculations.",
+
+            "Your mission is to calculate the structure's total volume, determine its exposed surface area, and pass the final security check.",
+
+            "This is your final assignment. The future of Cylinder City depends on your calculations."
+
+        ];
+
+        let sceneIndex = 0;
+
+        const story = document.getElementById("story");
+        const startButton = document.getElementById("startButton");
+
+
+        function playStory() {
+
+            story.style.opacity = 0;
+
+            setTimeout(function() {
+
+                if (sceneIndex < scenes.length) {
+
+                    story.textContent = scenes[sceneIndex];
+
+                    story.style.opacity = 1;
+
+                    sceneIndex++;
+
+                    setTimeout(playStory, 3000);
+
+                } else {
+
+                    story.textContent = "FINAL MISSION READY";
+
+                    story.style.opacity = 1;
+
+                    startButton.style.display = "inline-block";
+
+                }
+
+            }, 700);
+
+        }
+
+
+        // START STORY
+
+        playStory();
+
+
+        // BEGIN FINAL MISSION
+
+        function startMission() {
+
+            document.getElementById("briefingSection").style.display = "none";
+
+            document.getElementById("missionSection").style.display = "block";
+
+        }
+
+
+        // CHECK VOLUME
+
+        function checkVolume() {
+
+            const input =
+                document.getElementById("volumeAnswer").value;
+
+            const feedback =
+                document.getElementById("volumeFeedback");
+
+            if (input.trim() === "") {
+
+                feedback.textContent = "Enter your volume calculation first.";
+
+                feedback.className = "feedback error";
+
                 return;
+
             }
 
-            correct = Math.abs(answer - correctPiCoefficient) < 0.01;
-
-        }
-
-
-        else if (selectedShape === "house") {
-
-            const answer = Number(
-                document.getElementById("decimalAnswer").value
-            );
-
-            if (document.getElementById("decimalAnswer").value.trim() === "") {
-                alert("Please enter an answer.");
-                return;
-            }
-
-            correct =
-                Math.abs(answer - correctDecimalVolume) < 0.011;
-
-        }
-
-
-        else if (selectedShape === "rocket") {
-
-            const piAnswer = Number(
-                document.getElementById("rocketPiAnswer").value
-            );
-
-            const decimalAnswer = Number(
-                document.getElementById("rocketDecimalAnswer").value
-            );
+            const answer = Number(input);
 
             if (
-                document.getElementById("rocketPiAnswer").value.trim() === "" ||
-                document.getElementById("rocketDecimalAnswer").value.trim() === ""
+                Number.isFinite(answer) &&
+                Math.abs(answer - correctVolume) <= 0.02
             ) {
-                alert("Please complete both answer boxes.");
-                return;
-            }
 
-            const piCorrect =
-                Math.abs(piAnswer - correctPiCoefficient) < 0.01;
+                feedback.textContent =
+                    "CORRECT! Containment liquid quantity verified.";
 
-            const decimalCorrect =
-                Math.abs(decimalAnswer - correctDecimalVolume) < 0.011;
+                feedback.className = "feedback success";
 
-            correct = piCorrect && decimalCorrect;
+                document.getElementById("volumeAnswer").disabled = true;
 
-        }
+                document.querySelector(
+                    "#volumeSection button"
+                ).disabled = true;
 
-
-        if (correct) {
-
-            document.getElementById("feedback").textContent =
-                "Correct! Structure calculations verified.";
-
-            document.getElementById("feedback").className = "success";
-
-            document.getElementById("checkButton").disabled = true;
-
-            document.getElementById("nextButton").style.display = "inline-block";
-
-            document.getElementById("answerSection").style.display = "none";
-
-            if (currentIndex === 3) {
-
-                document.getElementById("nextButton").style.display = "none";
-
-                document.getElementById("completionSection").style.display =
+                document.getElementById("surfaceSection").style.display =
                     "block";
 
+                localStorage.setItem("finalVolumeVerified", "true");
+
+            } else {
+
+                feedback.textContent =
+                    "Incorrect. Review the dimensions and try again.";
+
+                feedback.className = "feedback error";
+
             }
 
-        } else {
+        }
 
-            document.getElementById("feedback").textContent =
-                "Incorrect. Review your calculations and try again.";
 
-            document.getElementById("feedback").className = "error";
+        // CHECK SURFACE AREA
+
+        function checkSurfaceArea() {
+
+            const input =
+                document.getElementById("surfaceAnswer").value;
+
+            const feedback =
+                document.getElementById("surfaceFeedback");
+
+            if (input.trim() === "") {
+
+                feedback.textContent =
+                    "Enter your surface area calculation first.";
+
+                feedback.className = "feedback error";
+
+                return;
+
+            }
+
+            const answer = Number(input);
+
+            if (
+                Number.isFinite(answer) &&
+                Math.abs(answer - correctSurfaceArea) <= 0.02
+            ) {
+
+                feedback.textContent =
+                    "CORRECT! Reinforcement steel quantity verified.";
+
+                feedback.className = "feedback success";
+
+                document.getElementById("surfaceAnswer").disabled = true;
+
+                document.querySelector(
+                    "#surfaceSection button"
+                ).disabled = true;
+
+                document.getElementById("securitySection").style.display =
+                    "block";
+
+                localStorage.setItem("finalSurfaceAreaVerified", "true");
+
+                localStorage.setItem("finalMissionCalculationsComplete", "true");
+
+            } else {
+
+                feedback.textContent =
+                    "Incorrect. Review the exposed surfaces and try again.";
+
+                feedback.className = "feedback error";
+
+            }
 
         }
 
-    }
 
+        // FINAL SECURITY QUESTION
 
-    function nextObject() {
+        function checkSecurity(answer) {
 
-        if (currentIndex < 3) {
+            const feedback =
+                document.getElementById("securityFeedback");
 
-            currentIndex++;
+            if (answer === 8) {
 
-            newChallenge();
+                feedback.textContent =
+                    "CORRECT! FINAL MISSION COMPLETE.";
+
+                feedback.className = "feedback success";
+
+                localStorage.setItem("finalMissionComplete", "true");
+
+                const buttons =
+                    document.querySelectorAll(".optionButton");
+
+                buttons.forEach(button => {
+                    button.disabled = true;
+                });
+
+                setTimeout(function() {
+
+                    window.location.href = "lastmessage.html";
+
+                }, 1800);
+
+            } else {
+
+                feedback.textContent =
+                    "Incorrect. Think about how volume changes when all three dimensions change.";
+
+                feedback.className = "feedback error";
+
+            }
 
         }
 
-    }
-
-
-    function continueToSemifinal() {
-
-        window.location.href = "semifinal.html";
-
-    }
-
-
-    // Start the first object
-
-    newChallenge();
-
-</script>
+    </script>
 
 </body>
 </html>

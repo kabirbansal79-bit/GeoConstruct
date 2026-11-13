@@ -1,15 +1,16 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APEX Architecture - Volume Training</title>
+    <title>APEX - Volume Construct</title>
 
     <style>
         body {
             margin: 0;
-            padding: 30px 15px;
+            padding: 25px 15px;
             background: #111827;
             color: white;
             font-family: Arial, sans-serif;
@@ -23,15 +24,10 @@
 
         h1 {
             color: #60a5fa;
-            margin-bottom: 5px;
         }
 
         h2 {
             color: #93c5fd;
-        }
-
-        p {
-            line-height: 1.6;
         }
 
         .panel {
@@ -59,10 +55,6 @@
             margin: 20px auto;
             max-width: 450px;
             text-align: left;
-        }
-
-        .dimensions p {
-            margin: 7px 0;
         }
 
         input {
@@ -94,36 +86,8 @@
             background: #1d4ed8;
         }
 
-        button:disabled {
-            background: #4b5563;
-            cursor: not-allowed;
-        }
-
         #feedback {
             font-weight: bold;
-            margin-top: 15px;
-        }
-
-        .progress {
-            color: #93c5fd;
-            font-size: 15px;
-        }
-
-        .instructions {
-            color: #d1d5db;
-            font-size: 14px;
-        }
-
-        #nextButton {
-            display: none;
-        }
-
-        #answerSection {
-            margin-top: 20px;
-        }
-
-        #completionSection {
-            display: none;
         }
 
         .success {
@@ -132,6 +96,24 @@
 
         .error {
             color: #f87171;
+        }
+
+        .progress {
+            color: #93c5fd;
+        }
+
+        #nextButton,
+        #completionSection,
+        #piAnswerArea,
+        #decimalAnswerArea,
+        #rocketAnswerArea {
+            display: none;
+        }
+
+        .missionKey {
+            color: #facc15;
+            font-size: 40px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -144,17 +126,17 @@
     <h2>Volume Construct Training</h2>
 
     <p>
-        Before entering the next stage of your mission,
-        you must successfully calculate the volume of all four structures.
+        Complete all four structure calculations to continue
+        to the next stage of your mission.
     </p>
 
     <div class="panel">
 
         <p class="progress" id="progress">OBJECT 1 OF 4</p>
 
-        <h2 id="objectTitle">Ice Cream Cone</h2>
+        <h2 id="objectTitle"></h2>
 
-        <img id="objectImage" src="" alt="3D structure">
+        <img id="objectImage" src="" alt="Structure image">
 
         <p id="objectDescription"></p>
 
@@ -163,7 +145,7 @@
             <div id="dimensionDetails"></div>
         </div>
 
-        <p class="instructions" id="answerInstructions"></p>
+        <p id="instructions"></p>
 
         <div id="answerSection">
 
@@ -172,11 +154,11 @@
                     type="number"
                     id="piAnswer"
                     step="any"
-                    placeholder="Enter the coefficient of π"
+                    placeholder="Coefficient of π"
                 >
             </div>
 
-            <div id="decimalAnswerArea" style="display:none;">
+            <div id="decimalAnswerArea">
                 <input
                     type="number"
                     id="decimalAnswer"
@@ -185,23 +167,23 @@
                 >
             </div>
 
-            <div id="rocketAnswerArea" style="display:none;">
+            <div id="rocketAnswerArea">
                 <input
                     type="number"
                     id="rocketPiAnswer"
                     step="any"
-                    placeholder="Enter the coefficient of π"
+                    placeholder="Coefficient of π"
                 >
 
                 <input
                     type="number"
                     id="rocketDecimalAnswer"
                     step="any"
-                    placeholder="Enter the non-π volume"
+                    placeholder="Volume of the fins"
                 >
             </div>
 
-            <button onclick="checkAnswer()" id="checkButton">
+            <button id="checkButton" onclick="checkAnswer()">
                 Check Answer
             </button>
 
@@ -214,25 +196,27 @@
         </button>
 
         <div id="completionSection">
-            <h2 class="success">TRAINING COMPLETE</h2>
 
-            <p>
-                All four structures have been successfully calculated.
-                You are cleared to proceed to the semifinal mission.
-            </p>
+            <h2>TRAINING COMPLETE</h2>
+
+            <p>All four structures have been calculated successfully.</p>
+
+            <p class="missionKey">The key is 11.</p>
 
             <button onclick="continueToSemifinal()">
-                Proceed to Semifinal Mission →
+                Proceed to Semifinal →
             </button>
+
         </div>
 
     </div>
 
 </div>
 
+
 <script>
 
-    // Images for the four objects
+    // IMAGES
 
     const imageLinks = {
         iceCream: "https://commons.wikimedia.org/wiki/Special:FilePath/Ice-cream.svg",
@@ -245,38 +229,40 @@
     };
 
 
-    // The four objects must be completed in this order
+    // GAME VARIABLES
 
     const objects = ["iceCream", "house", "popCan", "rocket"];
 
     let currentIndex = 0;
-    let selectedShape = "";
-    let dimensions = {};
+    let correctPi = 0;
+    let correctDecimal = 0;
 
-    let correctPiCoefficient = 0;
-    let correctDecimalVolume = 0;
+    let savedConeRadius = 0;
+    let savedConeHeight = 0;
 
+
+    // RANDOM NUMBER FROM 3 TO 7
 
     function randomNumber() {
         return Math.floor(Math.random() * 5) + 3;
     }
 
 
+    // SET UP A CHALLENGE
+
     function newChallenge() {
 
-        selectedShape = objects[currentIndex];
-
-        dimensions = {};
+        const object = objects[currentIndex];
 
         document.getElementById("progress").textContent =
             "OBJECT " + (currentIndex + 1) + " OF 4";
 
         document.getElementById("feedback").textContent = "";
+        document.getElementById("feedback").className = "";
 
         document.getElementById("nextButton").style.display = "none";
-
+        document.getElementById("completionSection").style.display = "none";
         document.getElementById("answerSection").style.display = "block";
-
         document.getElementById("checkButton").disabled = false;
 
         document.getElementById("piAnswer").value = "";
@@ -288,107 +274,90 @@
         document.getElementById("decimalAnswerArea").style.display = "none";
         document.getElementById("rocketAnswerArea").style.display = "none";
 
-        document.getElementById("completionSection").style.display = "none";
+        document.getElementById("objectImage").src = imageLinks[object];
 
 
-        if (selectedShape === "iceCream") {
+        // ICE CREAM: CONE + HEMISPHERE
+
+        if (object === "iceCream") {
 
             const radius = randomNumber();
             const coneHeight = randomNumber();
 
-            dimensions.radius = radius;
-            dimensions.coneHeight = coneHeight;
+            savedConeRadius = radius;
+            savedConeHeight = coneHeight;
 
-            correctPiCoefficient =
+            correctPi =
                 (radius * radius * coneHeight / 3) +
                 (2 * Math.pow(radius, 3) / 3);
 
-            correctDecimalVolume = 0;
+            correctDecimal = 0;
 
-            document.getElementById("objectTitle").textContent =
-                "Ice Cream Cone";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure consists of a cone with a hemisphere on top. Both parts have the same radius.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Radius: " + radius + " units</p>" +
-                "<p>Cone height: " + coneHeight + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the total volume. Enter only the coefficient of π. For example, if your answer is 24π, enter 24.";
+            setDetails(
+                "Ice Cream Cone",
+                "This structure consists of a cone with a hemisphere on top. Both have the same radius.",
+                "Radius: " + radius + " units" +
+                "<br>Cone height: " + coneHeight + " units",
+                "Calculate the total volume. Enter only the coefficient of π."
+            );
 
             document.getElementById("piAnswerArea").style.display = "block";
-
         }
 
 
-        else if (selectedShape === "house") {
+        // HOUSE: CUBE + SQUARE PYRAMID
+
+        else if (object === "house") {
 
             const side = randomNumber();
             const roofHeight = randomNumber();
 
-            dimensions.side = side;
-            dimensions.roofHeight = roofHeight;
+            correctDecimal = Math.round(
+                (
+                    Math.pow(side, 3) +
+                    Math.pow(side, 2) * roofHeight / 3
+                ) * 100
+            ) / 100;
 
-            correctDecimalVolume =
-                Math.round(
-                    (Math.pow(side, 3) +
-                    (Math.pow(side, 2) * roofHeight / 3)) * 100
-                ) / 100;
+            correctPi = 0;
 
-            correctPiCoefficient = 0;
-
-            document.getElementById("objectTitle").textContent =
-                "House";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure consists of a cube with a square pyramid on top. The pyramid has the same base dimensions as the cube.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Cube side length: " + side + " units</p>" +
-                "<p>Pyramid height: " + roofHeight + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the total volume and round your answer to 2 decimal places.";
+            setDetails(
+                "House",
+                "This structure consists of a cube with a square pyramid on top.",
+                "Cube side length: " + side + " units" +
+                "<br>Pyramid height: " + roofHeight + " units",
+                "Calculate the total volume and round your answer to 2 decimal places."
+            );
 
             document.getElementById("decimalAnswerArea").style.display = "block";
-
         }
 
 
-        else if (selectedShape === "popCan") {
+        // POP CAN: CYLINDER
+
+        else if (object === "popCan") {
 
             const radius = randomNumber();
             const height = randomNumber();
 
-            dimensions.radius = radius;
-            dimensions.height = height;
+            correctPi = radius * radius * height;
+            correctDecimal = 0;
 
-            correctPiCoefficient =
-                radius * radius * height;
-
-            correctDecimalVolume = 0;
-
-            document.getElementById("objectTitle").textContent =
-                "Pop Can";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure is a cylinder.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Radius: " + radius + " units</p>" +
-                "<p>Height: " + height + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the volume. Enter only the coefficient of π.";
+            setDetails(
+                "Pop Can",
+                "This structure is a cylinder.",
+                "Radius: " + radius + " units" +
+                "<br>Height: " + height + " units",
+                "Calculate the volume. Enter only the coefficient of π."
+            );
 
             document.getElementById("piAnswerArea").style.display = "block";
-
         }
 
 
-        else if (selectedShape === "rocket") {
+        // ROCKET: CYLINDER + CONE + TWO FINS
+
+        else if (object === "rocket") {
 
             const radius = randomNumber();
             const bodyHeight = randomNumber();
@@ -398,147 +367,132 @@
             const finHeight = randomNumber();
             const finDepth = randomNumber();
 
-            dimensions.radius = radius;
-            dimensions.bodyHeight = bodyHeight;
-            dimensions.coneHeight = coneHeight;
-            dimensions.finBase = finBase;
-            dimensions.finHeight = finHeight;
-            dimensions.finDepth = finDepth;
+            correctPi =
+                radius * radius * bodyHeight +
+                radius * radius * coneHeight / 3;
 
-            // Cylinder and cone contribute the π part.
-            correctPiCoefficient =
-                (radius * radius * bodyHeight) +
-                (radius * radius * coneHeight / 3);
-
-            // Two triangular prism fins contribute the non-π part.
-            correctDecimalVolume =
+            correctDecimal =
                 finBase * finHeight * finDepth;
 
-            correctDecimalVolume =
-                Math.round(correctDecimalVolume * 100) / 100;
+            setDetails(
+                "Rocket Ship",
+                "This structure consists of a cylinder, a cone, and two identical triangular prism fins.",
+                "Body radius: " + radius + " units" +
+                "<br>Body height: " + bodyHeight + " units" +
+                "<br>Nose cone height: " + coneHeight + " units" +
+                "<br>Each fin base: " + finBase + " units" +
+                "<br>Each fin height: " + finHeight + " units" +
+                "<br>Each fin depth: " + finDepth + " units",
+                "Calculate the total volume. Enter the coefficient of π in the first box and the combined fin volume in the second box. Round the fin volume to 2 decimal places."
+            );
 
-            document.getElementById("objectTitle").textContent =
-                "Rocket Ship";
-
-            document.getElementById("objectDescription").textContent =
-                "This structure consists of a cylinder, a cone, and two identical triangular prism fins.";
-
-            document.getElementById("dimensionDetails").innerHTML =
-                "<p>Body radius: " + radius + " units</p>" +
-                "<p>Body height: " + bodyHeight + " units</p>" +
-                "<p>Nose cone height: " + coneHeight + " units</p>" +
-                "<p>Each fin triangle base: " + finBase + " units</p>" +
-                "<p>Each fin triangle height: " + finHeight + " units</p>" +
-                "<p>Each fin prism depth: " + finDepth + " units</p>";
-
-            document.getElementById("answerInstructions").textContent =
-                "Calculate the total volume. Enter the coefficient of π in the first box and the combined volume of the fins in the second box. Round the non-π part to 2 decimal places.";
-
-            document.getElementById("rocketAnswerArea").style.display =
-                "block";
-
+            document.getElementById("rocketAnswerArea").style.display = "block";
         }
 
+    }
 
-        showShape();
+
+    // DISPLAY OBJECT INFORMATION
+
+    function setDetails(title, description, dimensions, instructions) {
+
+        document.getElementById("objectTitle").textContent = title;
+        document.getElementById("objectDescription").textContent = description;
+        document.getElementById("dimensionDetails").innerHTML = dimensions;
+        document.getElementById("instructions").textContent = instructions;
 
     }
 
 
-    function showShape() {
-
-        document.getElementById("objectImage").src =
-            imageLinks[selectedShape];
-
-    }
-
+    // CHECK ANSWERS
 
     function checkAnswer() {
 
         let correct = false;
 
-        if (selectedShape === "iceCream" ||
-            selectedShape === "popCan") {
+        if (
+            objects[currentIndex] === "iceCream" ||
+            objects[currentIndex] === "popCan"
+        ) {
 
-            const answer = Number(
-                document.getElementById("piAnswer").value
-            );
+            const input = document.getElementById("piAnswer").value;
 
-            if (document.getElementById("piAnswer").value.trim() === "") {
-                alert("Please enter an answer.");
-                return;
-            }
-
-            correct = Math.abs(answer - correctPiCoefficient) < 0.01;
-
-        }
-
-
-        else if (selectedShape === "house") {
-
-            const answer = Number(
-                document.getElementById("decimalAnswer").value
-            );
-
-            if (document.getElementById("decimalAnswer").value.trim() === "") {
+            if (input.trim() === "") {
                 alert("Please enter an answer.");
                 return;
             }
 
             correct =
-                Math.abs(answer - correctDecimalVolume) < 0.011;
+                Number.isFinite(Number(input)) &&
+                Math.abs(Number(input) - correctPi) < 0.01;
 
         }
 
 
-        else if (selectedShape === "rocket") {
+        else if (objects[currentIndex] === "house") {
 
-            const piAnswer = Number(
-                document.getElementById("rocketPiAnswer").value
-            );
+            const input = document.getElementById("decimalAnswer").value;
 
-            const decimalAnswer = Number(
-                document.getElementById("rocketDecimalAnswer").value
-            );
+            if (input.trim() === "") {
+                alert("Please enter an answer.");
+                return;
+            }
 
-            if (
-                document.getElementById("rocketPiAnswer").value.trim() === "" ||
-                document.getElementById("rocketDecimalAnswer").value.trim() === ""
-            ) {
+            correct =
+                Number.isFinite(Number(input)) &&
+                Math.abs(Number(input) - correctDecimal) < 0.011;
+
+        }
+
+
+        else if (objects[currentIndex] === "rocket") {
+
+            const piInput = document.getElementById("rocketPiAnswer").value;
+            const finInput = document.getElementById("rocketDecimalAnswer").value;
+
+            if (piInput.trim() === "" || finInput.trim() === "") {
                 alert("Please complete both answer boxes.");
                 return;
             }
 
-            const piCorrect =
-                Math.abs(piAnswer - correctPiCoefficient) < 0.01;
+            const piAnswer = Number(piInput);
+            const finAnswer = Number(finInput);
 
-            const decimalCorrect =
-                Math.abs(decimalAnswer - correctDecimalVolume) < 0.011;
-
-            correct = piCorrect && decimalCorrect;
+            correct =
+                Number.isFinite(piAnswer) &&
+                Number.isFinite(finAnswer) &&
+                Math.abs(piAnswer - correctPi) < 0.01 &&
+                Math.abs(finAnswer - correctDecimal) < 0.011;
 
         }
 
 
+        // CORRECT ANSWER
+
         if (correct) {
 
             document.getElementById("feedback").textContent =
-                "Correct! Structure calculations verified.";
+                "Correct! Calculation verified.";
 
             document.getElementById("feedback").className = "success";
 
             document.getElementById("checkButton").disabled = true;
-
-            document.getElementById("nextButton").style.display = "inline-block";
-
             document.getElementById("answerSection").style.display = "none";
+
+
+            // LAST OBJECT COMPLETED
 
             if (currentIndex === 3) {
 
-                document.getElementById("nextButton").style.display = "none";
+                localStorage.setItem("volumeConstructKey", "11");
+                localStorage.setItem("coneRadius", savedConeRadius);
+                localStorage.setItem("coneHeight", savedConeHeight);
 
-                document.getElementById("completionSection").style.display =
-                    "block";
+                document.getElementById("completionSection").style.display = "block";
+
+            } else {
+
+                document.getElementById("nextButton").style.display = "inline-block";
 
             }
 
@@ -554,6 +508,8 @@
     }
 
 
+    // NEXT OBJECT
+
     function nextObject() {
 
         if (currentIndex < 3) {
@@ -562,19 +518,24 @@
 
             newChallenge();
 
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
         }
 
     }
 
 
+    // GO TO SEMIFINAL
+
     function continueToSemifinal() {
-
         window.location.href = "semifinal.html";
-
     }
 
 
-    // Start the first object
+    // START
 
     newChallenge();
 

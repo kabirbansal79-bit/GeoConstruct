@@ -1,47 +1,237 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>APEX Architecture - Final Code</title>
+
     <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 25px;
+            box-sizing: border-box;
+            background:
+                linear-gradient(rgba(10, 15, 30, 0.92), rgba(10, 15, 30, 0.96)),
+                url("https://d3jddrml5mymee.cloudfront.net/assets/blog/wp-content/uploads/2013/06/future_City_desgns.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #container {
+            width: 90%;
+            max-width: 750px;
+            background: #1f2937;
+            border: 1px solid #3b82f6;
+            border-radius: 15px;
+            padding: 35px;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.2);
+        }
+
         h1 {
             color: hsl(42, 87%, 64%);
             text-align: center;
-            margin-top: 20%;
-        }  
+            margin-top: 10px;
+            font-size: clamp(23px, 4vw, 32px);
+        }
+
+        p {
+            color: #d1d5db;
+            line-height: 1.7;
+            background: #111827;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
         #homepage {
             transition: opacity 0.8s ease-in-out;
         }
+
+        .subtitle {
+            color: #60a5fa;
+            letter-spacing: 3px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .divider {
+            height: 2px;
+            background: #374151;
+            margin: 25px 0;
+        }
+
+        label {
+            display: block;
+            color: #93c5fd;
+            line-height: 1.6;
+            margin: 22px 0 12px;
+        }
+
+        input {
+            width: 80%;
+            max-width: 300px;
+            padding: 14px;
+            box-sizing: border-box;
+            border: 1px solid #3b82f6;
+            border-radius: 7px;
+            background: #111827;
+            color: white;
+            font-size: 20px;
+            letter-spacing: 5px;
+            text-align: center;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: hsl(42, 87%, 64%);
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.2);
+        }
+
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 13px 30px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #38bdf8;
+            color: #111827;
+        }
+
+        #feedback {
+            display: none;
+            text-align: center;
+            font-weight: bold;
+            background: transparent;
+            border: none;
+        }
+
+        @media (max-width: 550px) {
+            #container {
+                padding: 22px;
+            }
+        }
     </style>
 </head>
+
 <body>
-    <h1>Activate the code by typing the correct sequence:</h1>
 
-    <p>Volume of a Cylinder: V = πr²h</p>
-    <p>Volume of a Rectangular Prism: V = πr²</p>
-    <p>Surface Area of a Cylinder: SA = 2πrh + 2πr²</p>
-    <p>Surface Area of a Rectangular Prism: SA = 2lw + 2h</p>
-    <p>A cone has 1/3rd the volume of a cylinder with the same base and height</p>
-    <p>Tripling the radius of a cylinder increase the volume by a factor of 3</p>
-    
+    <div id="container">
 
-    <label for="finalcode">Type your final message in typing a letter 1 for the statements that are correct and 0 for the statements that are incorrect:</label>
+        <div id="homepage">
 
-    <input type="text" id="finalcode" name="finalcode">
+            <h1>APEX ARCHITECTURE GROUP</h1>
+
+            <div class="subtitle">
+                FINAL SECURITY PROTOCOL
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 style="color:#38bdf8;">
+                ACTIVATE THE CODE
+            </h2>
+
+            <h1>Activate the code by typing the correct sequence:</h1>
+
+            <p>Volume of a Cylinder: V = πr²h</p>
+
+            <p>Volume of a Rectangular Prism: V = πr²</p>
+
+            <p>Surface Area of a Cylinder: SA = 2πrh + 2πr²</p>
+
+            <p>Surface Area of a Rectangular Prism: SA = 2lw + 2h</p>
+
+            <p>A cone has 1/3rd the volume of a cylinder with the same base and height</p>
+
+            <p>Tripling the radius of a cylinder increase the volume by a factor of 3</p>
+
+            <div class="divider"></div>
+
+            <form id="codeForm">
+
+                <label for="finalcode">
+                    Type your final message in typing a letter 1 for the statements that are correct and 0 for the statements that are incorrect:
+                </label>
+
+                <input
+                    type="text"
+                    id="finalcode"
+                    name="finalcode"
+                    maxlength="6"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    placeholder="000000"
+                >
+
+                <button type="submit">
+                    SUBMIT CODE →
+                </button>
+
+            </form>
+
+            <p id="feedback"></p>
+
+        </div>
+
+    </div>
+
 
     <script>
-        code == 101010
 
-        getElementById("finalcode").addEventListener("input", function() {
-            if (this.value === code) {
-                alert("you have successfully activated the code 101010 in binary or 42 in decimal, you have saved the city! ");
+        const code = "101010";
+
+        document.getElementById("codeForm").addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const userCode =
+                document.getElementById("finalcode").value.trim();
+
+            const feedback =
+                document.getElementById("feedback");
+
+            if (userCode === code) {
+
+                alert("you have successfully activated the code 101010 in binary or 42 in decimal, you have saved the city!");
+
                 location.href = "grandfinale.html";
-            }
-        });
-    </script>
 
-    
+            } else {
+
+                feedback.style.display = "block";
+
+                feedback.style.color = "#f87171";
+
+                feedback.textContent =
+                    "Incorrect sequence. Please review the statements and try again.";
+
+            }
+
+        });
+
+    </script>
 
 </body>
 </html>
