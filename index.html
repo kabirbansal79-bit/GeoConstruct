@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+    function goToNextPage() {
+
+        document.getElementById("homepage")
+            .classList.add("fade-out");
+
+        setTimeout(function() {
+            location.href = "Initialanimation.html";
+        }, 800);
+
+    }
+</script>
+<style>
+    #homepage {
+    opacity: 1;
+    transition: opacity 0.8s ease;
+}
+
+#homepage.fade-out {
+    opacity: 0;
+}
+    body{
+        font-family: Modern sans-serif;
+        text-align: center;
+
+        background-color: #101b2d;
+        color: rgb(249, 245, 245);
+        padding-top: 150px;
+        margin: 0;
+        font-size: 30px;
+
+    }
+    .home-title {
+    animation: slideIn 1.2s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+button {
+    display: block;
+    margin: 40px auto 0;
+
+    padding: 16px 38px;
+    font-size: 18px;
+    font-weight: 600;
+
+    color: white;
+    background: #2563eb;
+
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 20px rgba(37, 99, 235, 0.3);
+
+    opacity: 0;
+    animation: buttonSlide 0.8s ease-out 1.3s forwards;
+
+    transition: transform 0.3s ease,
+                background 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+button:hover {
+    background: #3b82f6;
+    transform: scale(1.08);
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.5);
+}
+
+@keyframes buttonSlide {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+    
+</style>
+</head>
+<body>
+    <div id = "homepage">
+    <h1 class="home-title">Your Architecture Journey Starts Here</h1>
+    <p class="home-title">Complete this training module to become a master of architectural design</p>
+    <button onclick="goToNextPage()">Get Started →</button>
+    <p class="home-text">
+       
+    </p>
+    <p class="home-text">
+        Do you have what it takes to defeat The DIMENSION 0?
+    </p>
+    </div>
+    <script>
+        
+    </script>
+</body>
+
+</html>

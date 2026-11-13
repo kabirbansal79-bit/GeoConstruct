@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>APEX Introduction</title>
+
+    <style>
+        body {
+            background: #101827;
+            color: white;
+            font-family: Arial;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #story {
+            font-size: 32px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.5s;
+        }
+
+        button {
+            display: none;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: #1685db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <div id="story"></div>
+        <button id = start onclick="location.href = 'DesignCrossroads.html'">I'm ready</button>
+    </div>
+    </button>
+
+    <script>
+        const story = document.getElementById("story");
+        const start = document.getElementById("start");
+
+        const scenes = [
+            "This is it...",
+            "Humanity has reached new heights in architecture and design.",
+            "The greatest buildings are designed by the greatest minds.",
+            "We have created some of the most stunning and complex structures the world has ever seen.",
+            "However...",
+            "Your career starts today."
+        ];
+
+        let currentScene = 0;
+
+        function showScene() {
+
+            story.style.opacity = 0;
+
+            setTimeout(() => {
+
+                story.textContent = scenes[currentScene];
+
+                story.style.opacity = 1;
+
+                currentScene++;
+
+                setTimeout(() => {
+
+                    if (currentScene < scenes.length) {
+                        showScene();
+                    } else {
+                        start.style.display = "block";
+                    }
+
+                }, 3000);
+
+            }, 1500);
+        }
+
+        showScene();
+    </script>
+
+</body>
+</html>

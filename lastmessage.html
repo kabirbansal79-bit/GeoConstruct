@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        h1 {
+            color: hsl(42, 87%, 64%);
+            text-align: center;
+            margin-top: 20%;
+        }  
+        #homepage {
+            transition: opacity 0.8s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <h1>One last message...</h1>
+
+
+    <h2> </h2>
+    <p>Volume of a Cylinder: V = πr²h</p>
+    <p>Volume of a Rectangular Prism: V = πr²</p>
+    <p>Surface Area of a Cylinder: SA = 2πrh + 2πr²</p>
+    <p>Surface Area of a Rectangular Prism: SA = 2lw + 2h</p>
+    <p>Tripling the radius of a cylinder increase the volume by a factor of 27</p>
+    <p>A cone has 1/2nd the volume of a cylinder with the same base and height</p>
+
+    <label for="finalcode">Type your final message in typing a letter 1 for the statements that are correct and 0 for the statements that are incorrect:</label>
+
+    <input type="text" id="finalcode" name="finalcode">
+
+    <script>
+        code == 101010
+
+        getElementById("finalcode").addEventListener("input", function() {
+            if (this.value === code) {
+                alert("You have broadcasted 101010 in binary to the world! Your message is 42 in decimal, which is the answer to life, the universe, and everything. You have successfully completed your architecture training !");
+                location.href = "grandfinale.html";
+            }
+        });
+    </script>
+
+    
+
+</body>
+</html>
